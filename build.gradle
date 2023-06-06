@@ -1,0 +1,81 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.0.6'
+    id 'io.spring.dependency-management' version '1.1.0'
+}
+
+group = 'ge.elzhart'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '17'
+
+
+repositories {
+    mavenCentral()
+}
+
+jar {
+    enabled = false
+}
+
+dependencies {
+    // Security
+    implementation "org.springframework.boot:spring-boot-starter-security:$spring_boot_version"
+
+    // Web
+    implementation "org.springframework.boot:spring-boot-starter-web:$spring_boot_version"
+    implementation "org.springframework.boot:spring-boot-starter-websocket"
+    implementation "com.squareup.okhttp3:okhttp:$okhttp_version"
+
+    //Reactive
+    implementation "org.springframework.boot:spring-boot-starter-webflux:$spring_boot_version"
+
+    // Messaging
+    implementation "org.springframework.boot:spring-boot-starter-amqp:$spring_boot_version"
+
+    // Integration
+    implementation "org.springframework.boot:spring-boot-starter-integration:$spring_boot_version"
+    implementation "org.springframework.integration:spring-integration-amqp:$spring_integration_version"
+
+    // Lombok
+    compileOnly "org.projectlombok:lombok:$lombok_version"
+    annotationProcessor "org.projectlombok:lombok:$lombok_version"
+
+    // Mapping
+    implementation "org.mapstruct:mapstruct:$mapstruct_version"
+    annotationProcessor "org.mapstruct:mapstruct-processor:$mapstruct_version"
+
+    // Database
+    implementation "org.springframework.data:spring-data-commons:$spring_data_commons_version"
+    implementation 'org.springframework.boot:spring-boot-starter-data-neo4j'
+
+    // Metrics
+    implementation "org.springframework.boot:spring-boot-starter-actuator:$spring_boot_version"
+
+    // Cache
+    implementation "com.hazelcast:hazelcast:$hazelcastVersion"
+    implementation "com.hazelcast:hazelcast-kubernetes:$hazelcastKubernetesVersion"
+    implementation "com.hazelcast:hazelcast-spring:$hazelcastVersion"
+
+    // for mutable lists
+    implementation "com.google.guava:guava:$guava_version"
+
+    //String
+    implementation "org.apache.commons:commons-lang3:$common_lang_version"
+
+    // Testing
+    testImplementation "org.springframework.boot:spring-boot-starter-test:$spring_boot_version"
+    testImplementation "io.projectreactor:reactor-test:$reactor_test_version"
+    testImplementation 'org.springframework.amqp:spring-rabbit-test'
+    testImplementation 'org.springframework.security:spring-security-test'
+    testImplementation "com.squareup.okhttp3:mockwebserver:$okhttp_version"
+    testImplementation "org.testcontainers:postgresql:$testcontainers_version"
+    testImplementation "org.testcontainers:neo4j:$testcontainers_version"
+    testImplementation "org.testcontainers:junit-jupiter:$testcontainers_version"
+    testImplementation "org.testcontainers:rabbitmq:$testcontainers_version"
+    testCompileOnly "org.projectlombok:lombok:$lombok_version"
+    testAnnotationProcessor "org.projectlombok:lombok:$lombok_version"
+}
+
+test {
+    useJUnitPlatform()
+}
