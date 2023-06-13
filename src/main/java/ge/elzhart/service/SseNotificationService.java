@@ -5,9 +5,9 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 
-import ge.elzhart.api.dto.TransactionEventDto;
+import ge.elzhart.api.dto.transaction.TransactionEventDto;
 import ge.elzhart.api.mapper.EventMapper;
-import ge.elzhart.repository.EmitterRepository;
+import ge.elzhart.model.repository.EmitterRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 

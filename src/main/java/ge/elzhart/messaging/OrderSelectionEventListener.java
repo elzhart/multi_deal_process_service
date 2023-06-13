@@ -6,11 +6,11 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Map;
 
-import ge.elzhart.api.dto.TransactionEventDto;
-import ge.elzhart.api.dto.TransactionGraphDto;
+import ge.elzhart.api.dto.transaction.TransactionEventDto;
+import ge.elzhart.api.dto.transaction.TransactionGraphDto;
 import ge.elzhart.service.NotificationService;
-import ge.elzhart.service.OrderSearchService;
-import ge.elzhart.service.OwnerService;
+import ge.elzhart.service.owner.OwnerService;
+import ge.elzhart.service.transaction.TransactionGraphService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -19,14 +19,14 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class OrderSelectionEventListener implements ApplicationListener<OrderSelectionEvent> {
 
-    private final OrderSearchService orderSearchService;
+    private final TransactionGraphService transactionGraphService;
     private final OwnerService ownerService;
     private final NotificationService notificationService;
 
     @Override
     public void onApplicationEvent(OrderSelectionEvent event) {
         log.info("Received spring custom event - {}", event);
-        List<TransactionGraphDto> transactionGraph = orderSearchService.findTransactionGraph(event.getUsername(), event.getOrderId());
+        List<TransactionGraphDto> transactionGraph = transactionGraphService.findTransactionGraph(event.getUsername(), event.getOrderId());
         if (!transactionGraph.isEmpty()) {
             ownerService.transactionOrders(transactionGraph);
             transactionGraph.forEach(transaction -> notificationService.sendNotification(
