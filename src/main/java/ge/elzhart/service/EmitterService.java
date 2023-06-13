@@ -4,8 +4,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
-
-import ge.elzhart.repository.EmitterRepository;
+import ge.elzhart.model.repository.EmitterRepository;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
@@ -16,7 +15,7 @@ public class EmitterService {
     private final EmitterRepository repository;
 
     public EmitterService(@Value("${events.connection.timeout}") long eventsTimeout,
-                          EmitterRepository repository) {
+            EmitterRepository repository) {
         this.eventsTimeout = eventsTimeout;
         this.repository = repository;
     }

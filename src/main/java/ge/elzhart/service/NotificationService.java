@@ -1,7 +1,7 @@
 package ge.elzhart.service;
 
 
-import ge.elzhart.api.dto.TransactionEventDto;
+import ge.elzhart.api.dto.transaction.TransactionEventDto;
 
 public interface NotificationService {
 

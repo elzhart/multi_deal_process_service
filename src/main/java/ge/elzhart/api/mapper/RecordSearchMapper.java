@@ -2,10 +2,11 @@ package ge.elzhart.api.mapper;
 
 import org.neo4j.driver.Value;
 
-import ge.elzhart.api.dto.TransactionGraphDto;
-import ge.elzhart.model.OrderCategory;
-import ge.elzhart.model.OrderStatus;
-import ge.elzhart.api.dto.OrderDto;
+import ge.elzhart.api.dto.order.OrderDto;
+import ge.elzhart.api.dto.transaction.TransactionGraphDto;
+import ge.elzhart.api.dto.user.UserDto;
+import ge.elzhart.model.domain.OrderCategory;
+import ge.elzhart.model.domain.OrderStatus;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -18,6 +19,13 @@ public class RecordSearchMapper {
                 .setCountry(value.get("country").asString())
                 .setStatus(OrderStatus.valueOf(value.get("status").asString()))
                 .setCategory(OrderCategory.valueOf(value.get("category").asString()));
+    }
+
+    public UserDto fromRecordToUser(Value value) {
+        return new UserDto(
+                value.get("id").asString(),
+                value.get("username").asString(),
+                value.get("fullName").asString());
     }
 
     public TransactionGraphDto fromRecordToTransaction(Value value) {

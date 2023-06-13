@@ -7,14 +7,17 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.security.Principal;
 
+import ge.elzhart.model.domain.Role;
 import ge.elzhart.service.EmitterService;
+import jakarta.annotation.security.RolesAllowed;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 
 @Slf4j
 @RestController
-@RequestMapping("/transactions")
+@RequestMapping("/api/sse/transactions")
+@RolesAllowed(Role.OWNER)
 @RequiredArgsConstructor
 public class EventController {
 
@@ -25,5 +28,4 @@ public class EventController {
         log.debug("Subscribing member with id {}", principal.getName());
         return emitterService.createEmitter(principal.getName());
     }
-
 }
