@@ -9,7 +9,6 @@ import java.util.Map;
 import ge.elzhart.api.dto.transaction.TransactionEventDto;
 import ge.elzhart.api.dto.transaction.TransactionGraphDto;
 import ge.elzhart.service.NotificationService;
-import ge.elzhart.service.owner.OwnerService;
 import ge.elzhart.service.transaction.TransactionGraphService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +19,6 @@ import lombok.extern.slf4j.Slf4j;
 public class OrderSelectionEventListener implements ApplicationListener<OrderSelectionEvent> {
 
     private final TransactionGraphService transactionGraphService;
-    private final OwnerService ownerService;
     private final NotificationService notificationService;
 
     @Override
@@ -28,9 +26,9 @@ public class OrderSelectionEventListener implements ApplicationListener<OrderSel
         log.info("Received spring custom event - {}", event);
         List<TransactionGraphDto> transactionGraph = transactionGraphService.findTransactionGraph(event.getUsername(), event.getOrderId());
         if (!transactionGraph.isEmpty()) {
-            ownerService.transactionOrders(transactionGraph);
+            transactionGraphService.transactionOrders(transactionGraph);
             transactionGraph.forEach(transaction -> notificationService.sendNotification(
-                    transaction.getOwnerName(),
+                    transaction.getUsername(),
                     new TransactionEventDto(
                             "TRANSACTION_COMPLETE",
                             Map.of("transaction order", transaction.getOrderTitle())))

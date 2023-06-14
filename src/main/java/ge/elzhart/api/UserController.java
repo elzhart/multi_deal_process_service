@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.security.Principal;
+
 import ge.elzhart.api.dto.user.CreateUserRequest;
 import ge.elzhart.api.dto.user.UpdateUserRequest;
 import ge.elzhart.api.dto.user.UserDto;
@@ -32,13 +34,13 @@ public class UserController {
     private final UserSearchService userSearchService;
 
     @PostMapping
-    public UserDto create(@RequestBody @Valid CreateUserRequest request) {
-        return userService.create(request);
+    public UserDto create(@RequestBody @Valid CreateUserRequest request, Principal principal) {
+        return userService.create(request, principal.getName());
     }
 
     @PutMapping("{id}")
-    public UserDto update(@PathVariable String id, @RequestBody @Valid UpdateUserRequest request) {
-        return userService.update(id, request);
+    public UserDto update(@PathVariable String id, @RequestBody @Valid UpdateUserRequest request, Principal principal) {
+        return userService.update(id, request, principal.getName());
     }
 
     @DeleteMapping("{id}")

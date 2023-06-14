@@ -5,7 +5,7 @@ import org.mapstruct.Mapper;
 import java.util.List;
 
 import ge.elzhart.api.dto.user.UserDto;
-import ge.elzhart.model.domain.User;
+import ge.elzhart.model.domain.user.User;
 
 
 @Mapper(componentModel = "spring")

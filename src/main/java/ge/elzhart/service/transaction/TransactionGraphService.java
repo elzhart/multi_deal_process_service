@@ -13,10 +13,16 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import ge.elzhart.api.dto.order.OrderDto;
 import ge.elzhart.api.dto.transaction.TransactionGraphDto;
 import ge.elzhart.api.mapper.RecordSearchMapper;
+import ge.elzhart.model.domain.Order;
+import ge.elzhart.model.domain.OrderStatus;
+import ge.elzhart.model.domain.user.User;
+import ge.elzhart.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -25,11 +31,12 @@ public class TransactionGraphService {
 
     private final Neo4jClient neo4jClient;
     private final DatabaseSelectionProvider databaseSelectionProvider;
+    private final UserService userService;
 
     public List<TransactionGraphDto> findTransactionGraph(String username, String orderId) {
 
         Collection<Map<String, Object>> results = neo4jClient
-                .query("MATCH p=(:Owner {name: $name})-[:SELECTED {type: 'FOR_TRANSACTION'}]->(order)-[r:SELECTED|CREATED*]-(:Owner {name: $name})\n"
+                .query("MATCH p=(:User {username: $name})-[:SELECTED {type: 'FOR_TRANSACTION'}]->(order)-[r:SELECTED|CREATED*]-(:User {username: $name})\n"
                         + "WHERE order.id = $id\n"
                         + "AND ALL(rel in r where ((TYPE(rel)= 'SELECTED' and rel.type = 'FOR_TRANSACTION') or TYPE(rel)= 'CREATED'))\n"
                         + "RETURN nodes(p), relationships(p)")
@@ -63,7 +70,7 @@ public class TransactionGraphService {
         Map<String, TransactionGraphDto> transactionGraphs = new HashMap<>();
         Map<String, OrderDto> orders = new HashMap<>();
         for (InternalNode next : nodes) {
-            if (next.hasLabel("Owner")) {
+            if (next.hasLabel("User")) {
                 TransactionGraphDto transactionGraphDto = RecordSearchMapper.fromRecordToTransaction(next.asValue());
                 transactionGraphs.put(next.elementId(), transactionGraphDto);
             }
@@ -87,6 +94,41 @@ public class TransactionGraphService {
 
         });
         return transactionGraphs.values().stream().toList();
+    }
+
+    public void transactionOrders(List<TransactionGraphDto> transactionGraph) {
+        Map<String, TransactionGraphDto> usernames = transactionGraph.stream()
+                .collect(Collectors.toMap(TransactionGraphDto::getUsername, Function.identity()));
+        Map<String, TransactionGraphDto> orderIds = transactionGraph.stream()
+                .collect(Collectors.toMap(TransactionGraphDto::getOrderId, Function.identity()));
+
+        Map<String, Order> transactionPair = new HashMap<>();
+        Map<String, String> detachPair = new HashMap<>();
+
+        List<User> users = userService.findAllByNameIn(usernames.keySet());
+
+        users.forEach(user -> {
+            Iterator<Order> iterator = user.getCreated().iterator();
+            while (iterator.hasNext()) {
+                Order next = iterator.next();
+                TransactionGraphDto transaction = orderIds.get(next.getId());
+                if (transaction != null) {
+                    detachPair.put(user.getUsername(), next.getId());
+                    transactionPair.put(transaction.getUsername(), next);
+                }
+            }
+        });
+
+        users.forEach(user -> {
+            if (transactionPair.containsKey(user.getUsername())) {
+                Order order = transactionPair.get(user.getUsername());
+                order.setStatus(OrderStatus.DRAFT);
+                user.getCreated().add(order);
+            }
+        });
+
+        userService.saveAll(users);
+        detachPair.forEach(userService::detachOrderFromUser);
     }
 
     private String database() {

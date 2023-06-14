@@ -12,5 +12,5 @@ public class OrderFilterDto {
     private OrderStatus status;
     private OrderCategory category;
     private String country;
-    private String userName;
+    private String username;
 }

@@ -20,14 +20,14 @@ public class OrderTestDataFactory {
     private final OrderService orderService;
 
     public OrderDto createOrder(
-            String ownerName,
+            String username,
             String title,
             OrderCategory category,
             OrderStatus status,
             String country) {
 
         return orderService.create(
-                ownerName,
+                username,
                 new OrderDto()
                         .setTitle(title)
                         .setCategory(category)
@@ -36,16 +36,16 @@ public class OrderTestDataFactory {
         ).get(0);
     }
 
-    public OrderDto selectOrder(String ownerName, String orderId, SelectType selectType) {
+    public OrderDto selectOrder(String username, String orderId, SelectType selectType) {
 
         switch (selectType) {
             case FOR_MATCH -> {
                 return orderService.selectForMatch(
-                        ownerName,
+                        username,
                         List.of(UUID.fromString(orderId))).get(0);
             }
             case FOR_TRANSACTION -> {
-                return orderService.selectForTransaction(ownerName, UUID.fromString(orderId)).get(0);
+                return orderService.selectForTransaction(username, UUID.fromString(orderId)).get(0);
             }
         }
         return null;

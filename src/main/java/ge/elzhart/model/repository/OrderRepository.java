@@ -12,25 +12,25 @@ import ge.elzhart.model.domain.SelectType;
 
 public interface OrderRepository extends Neo4jRepository<Order, String> {
 
-    @Query("MATCH (:Owner {name: $name})-[:CREATED]->(order)\n"
+    @Query("MATCH (:User {username: $name})-[:CREATED]->(order)\n"
             + "WHERE order.status = 'DRAFT'\n"
             + "RETURN order")
-    List<Order> findCreatedByOwnerName(@Param("name") String name);
+    List<Order> findCreatedByUsername(@Param("name") String username);
 
-    @Query("MATCH (:Owner {name: $name})-[:CREATED]->(order)\n"
+    @Query("MATCH (:User {username: $name})-[:CREATED]->(order)\n"
             + "WHERE order.status = 'POSTED'\n"
             + "RETURN order")
-    List<Order> findPostedByOwnerName(@Param("name") String name);
+    List<Order> findPostedByUsername(@Param("name") String username);
 
-    @Query("MATCH (:Owner {name: $name})-[selected: SELECTED]->(order)\n"
+    @Query("MATCH (:User {username: $name})-[selected: SELECTED]->(order)\n"
             + "WHERE order.status = 'POSTED'\n"
             + "AND selected.type = $type\n"
             + "RETURN order")
-    List<Order> findSelectedByOwnerName(@Param("name") String name, @Param("type") SelectType selectType);
+    List<Order> findSelectedByUsername(@Param("name") String username, @Param("type") SelectType selectType);
 
-    @Query("MATCH p=(:Owner {name: $name})-[selected: SELECTED]->(order)-[*]-(:Owner {name: $name})\n"
+    @Query("MATCH p=(:User {username: $name})-[selected: SELECTED]->(order)-[*]-(:User {username: $name})\n"
             + "WHERE order.status = 'POSTED'\n"
             + "AND selected.type = $type\n"
             + "RETURN nodes(p)")
-    List<ListValue> findMatchedByOwnerName(@Param("name") String name, @Param("type") SelectType selectType);
+    List<ListValue> findMatchedByUsername(@Param("name") String username, @Param("type") SelectType selectType);
 }

@@ -23,11 +23,11 @@ import ge.elzhart.api.mapper.RecordSearchMapper;
 import ge.elzhart.exception.NotFoundException;
 import ge.elzhart.model.domain.Order;
 import ge.elzhart.model.domain.OrderStatus;
-import ge.elzhart.model.domain.Owner;
 import ge.elzhart.model.domain.SelectOrderProperties;
 import ge.elzhart.model.domain.SelectType;
+import ge.elzhart.model.domain.user.User;
 import ge.elzhart.model.repository.OrderRepository;
-import ge.elzhart.service.owner.OwnerService;
+import ge.elzhart.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -35,34 +35,34 @@ import lombok.RequiredArgsConstructor;
 public class OrderService {
     private final OrderRepository orderRepository;
     private final OrderMapper orderMapper;
-    private final OwnerService ownerService;
+    private final UserService userService;
 
-    public List<OrderDto> findCreatedByOwnerName(String name) {
-        List<Order> postedByOwnerName = orderRepository.findCreatedByOwnerName(name);
-        return postedByOwnerName
+    public List<OrderDto> findCreatedByUsername(String username) {
+        List<Order> createdByUsername = orderRepository.findCreatedByUsername(username);
+        return createdByUsername
                 .stream()
                 .map(orderMapper::toDto)
                 .collect(Collectors.toList());
     }
 
-    public List<OrderDto> findPostedByOwnerName(String name) {
-        List<Order> postedByOwnerName = orderRepository.findPostedByOwnerName(name);
-        return postedByOwnerName
+    public List<OrderDto> findPostedByUsername(String username) {
+        List<Order> postedByUsername = orderRepository.findPostedByUsername(username);
+        return postedByUsername
                 .stream()
                 .map(orderMapper::toDto)
                 .collect(Collectors.toList());
     }
 
-    public List<OrderDto> findSelected(String name, SelectType selectType) {
-        List<Order> postedByOwnerName = orderRepository.findSelectedByOwnerName(name, selectType);
-        return postedByOwnerName
+    public List<OrderDto> findSelected(String username, SelectType selectType) {
+        List<Order> selectedByUsername = orderRepository.findSelectedByUsername(username, selectType);
+        return selectedByUsername
                 .stream()
                 .map(orderMapper::toDto)
                 .collect(Collectors.toList());
     }
 
-    public List<List<OrderDto>> findMatchedByOwnerName(String name) {
-        return orderRepository.findMatchedByOwnerName(name, SelectType.FOR_MATCH).stream()
+    public List<List<OrderDto>> findMatchedByUsername(String username) {
+        return orderRepository.findMatchedByUsername(username, SelectType.FOR_MATCH).stream()
                 .map(OrderService::getOrderDtos)
                 .sorted(Comparator.comparing(List::size))
                 .collect(Collectors.toList());
@@ -87,34 +87,34 @@ public class OrderService {
         return orderDtos;
     }
 
-    public List<OrderDto> create(String ownerName, OrderDto orderDto) {
-        Owner owner = ownerService.findByName(ownerName);
+    public List<OrderDto> create(String username, OrderDto orderDto) {
+        User user = userService.findByUsername(username);
 
         Order order = orderMapper.toNode(orderDto)
                 .withCreatedDate(LocalDateTime.now())
-                .withCreatedBy(ownerName);
-        owner.getCreated().add(order);
-        Owner saved = ownerService.save(owner);
+                .withCreatedBy(username);
+        user.getCreated().add(order);
+        User saved = userService.save(user);
         return saved.getCreated().stream().map(orderMapper::toDto).toList();
     }
 
-    public List<OrderDto> selectForMatch(String ownerName, List<UUID> orderIds) {
-        Owner owner = ownerService.findByName(ownerName);
+    public List<OrderDto> selectForMatch(String username, List<UUID> orderIds) {
+        User user = userService.findByUsername(username);
 
         List<String> ids = orderIds.stream().map(UUID::toString).toList();
         List<SelectOrderProperties> orderProperties = orderRepository.findAllById(ids)
                 .stream()
                 .map(order -> new SelectOrderProperties(SelectType.FOR_MATCH, order))
                 .toList();
-        owner.getSelected().addAll(orderProperties);
-        Owner saved = ownerService.save(owner);
+        user.getSelected().addAll(orderProperties);
+        User saved = userService.save(user);
         return saved.getSelected().stream()
                 .filter(properties -> properties.getType().equals(SelectType.FOR_MATCH))
                 .map(properties -> orderMapper.toDto(properties.getOrder()))
                 .toList();
     }
 
-    public OrderDto update(String orderId, OrderDto orderDto, String ownerName) {
+    public OrderDto update(String orderId, OrderDto orderDto, String username) {
         if (!orderDto.getStatus().equals(OrderStatus.DRAFT)) {
             throw new UnsupportedOperationException();
         }
@@ -123,16 +123,16 @@ public class OrderService {
                 .withCountry(orderDto.getCountry())
                 .withTitle(orderDto.getTitle())
                 .withLastModifiedDate(LocalDateTime.now())
-                .withLastModifiedBy(ownerName);
+                .withLastModifiedBy(username);
         Order updated = orderRepository.save(order);
         return orderMapper.toDto(updated);
     }
 
-    public OrderDto changeStatus(String ownerName, String orderId, OrderStatus orderStatus) {
+    public OrderDto changeStatus(String username, String orderId, OrderStatus orderStatus) {
         Order order = orderRepository.findById(orderId).orElseThrow(() -> new NotFoundException(OrderDto.class, orderId))
                 .withStatus(orderStatus)
                 .withLastModifiedDate(LocalDateTime.now())
-                .withLastModifiedBy(ownerName);
+                .withLastModifiedBy(username);
         Order changed = orderRepository.save(order);
         return orderMapper.toDto(changed);
     }
@@ -146,16 +146,16 @@ public class OrderService {
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public List<OrderDto> selectForTransaction(String ownerName, UUID orderId) {
-        Owner owner = ownerService.findByName(ownerName);
-        owner.getSelected().forEach(
+    public List<OrderDto> selectForTransaction(String username, UUID orderId) {
+        User user = userService.findByUsername(username);
+        user.getSelected().forEach(
                 selected -> {
                     if (orderId.toString().equals(selected.getOrder().getId())) {
                         selected.setType(SelectType.FOR_TRANSACTION);
                     }
                 }
         );
-        Owner saved = ownerService.save(owner);
+        User saved = userService.save(user);
         return saved.getSelected().stream()
                 .filter(properties -> properties.getType().equals(SelectType.FOR_TRANSACTION))
                 .map(properties -> orderMapper.toDto(properties.getOrder()))

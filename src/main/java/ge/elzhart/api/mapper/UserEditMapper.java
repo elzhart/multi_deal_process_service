@@ -12,7 +12,7 @@ import java.util.Set;
 import ge.elzhart.api.dto.user.CreateUserRequest;
 import ge.elzhart.api.dto.user.UpdateUserRequest;
 import ge.elzhart.model.domain.Role;
-import ge.elzhart.model.domain.User;
+import ge.elzhart.model.domain.user.User;
 
 import static java.util.stream.Collectors.toSet;
 import static org.mapstruct.NullValueCheckStrategy.ALWAYS;

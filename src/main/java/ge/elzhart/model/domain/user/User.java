@@ -1,4 +1,4 @@
-package ge.elzhart.model.domain;
+package ge.elzhart.model.domain.user;
 
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
@@ -8,13 +8,18 @@ import org.springframework.data.neo4j.core.schema.DynamicLabels;
 import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
+import org.springframework.data.neo4j.core.schema.Relationship;
 import org.springframework.data.neo4j.core.support.UUIDStringGenerator;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
+import ge.elzhart.model.domain.Order;
+import ge.elzhart.model.domain.Role;
+import ge.elzhart.model.domain.SelectOrderProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -48,6 +53,11 @@ public class User implements UserDetails {
 
     private String password;
     private String fullName;
+    @Relationship(type = "CREATED", direction = Relationship.Direction.OUTGOING)
+    private List<Order> created;
+    @Relationship(type = "SELECTED", direction = Relationship.Direction.OUTGOING)
+    private List<SelectOrderProperties> selected;
+
     @DynamicLabels
     private Set<String> authorities;
 

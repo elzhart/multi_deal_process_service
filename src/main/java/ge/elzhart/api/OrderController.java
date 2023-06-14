@@ -42,20 +42,20 @@ class OrderController {
 
     @PostMapping("/create")
     public List<OrderDto> create(@RequestBody OrderDto orderDto, Principal principal) {
-        String ownerName = principal.getName();
-        return orderService.create(ownerName, orderDto);
+        String username = principal.getName();
+        return orderService.create(username, orderDto);
     }
 
     @GetMapping("/created")
     public List<OrderDto> findSelfCreated(Principal principal) {
-        String ownerName = principal.getName();
-        return orderService.findCreatedByOwnerName(ownerName);
+        String username = principal.getName();
+        return orderService.findCreatedByUsername(username);
     }
 
     @PutMapping("/update/{orderId}")
     public OrderDto update(@PathVariable String orderId, @RequestBody OrderDto orderDto, Principal principal) {
-        String ownerName = principal.getName();
-        return orderService.update(orderId, orderDto, ownerName);
+        String username = principal.getName();
+        return orderService.update(orderId, orderDto, username);
     }
 
     @DeleteMapping("/delete/{orderId}")
@@ -65,14 +65,14 @@ class OrderController {
 
     @PutMapping("/post/{orderId}")
     public OrderDto post(@PathVariable String orderId, Principal principal) {
-        String ownerName = principal.getName();
-        return orderService.changeStatus(ownerName, orderId, OrderStatus.POSTED);
+        String username = principal.getName();
+        return orderService.changeStatus(username, orderId, OrderStatus.POSTED);
     }
 
     @GetMapping("/posted")
     public List<OrderDto> findSelfPosted(Principal principal) {
-        String ownerName = principal.getName();
-        return orderService.findPostedByOwnerName(ownerName);
+        String username = principal.getName();
+        return orderService.findPostedByUsername(username);
     }
 
     @PostMapping("/search")
@@ -81,46 +81,46 @@ class OrderController {
             Pageable pageable,
             Principal principal) {
         String userName = principal.getName();
-        orderFilterDto.setUserName(userName);
+        orderFilterDto.setUsername(userName);
         return new RestPage<>(orderSearchService.searchByFilter(orderFilterDto, pageable));
     }
 
     @PostMapping("/select/for_match")
     public List<OrderDto> select(@RequestBody SelectOrdersRequest selectOrdersRequest, Principal principal) {
-        String ownerName = principal.getName();
+        String username = principal.getName();
         List<UUID> orderIds = selectOrdersRequest.getOrderIds();
-        return orderService.selectForMatch(ownerName, orderIds);
+        return orderService.selectForMatch(username, orderIds);
     }
 
     @GetMapping("/selected/for_match")
     public List<OrderDto> findSelectedForMatch(Principal principal) {
-        String ownerName = principal.getName();
-        return orderService.findSelected(ownerName, SelectType.FOR_MATCH);
+        String username = principal.getName();
+        return orderService.findSelected(username, SelectType.FOR_MATCH);
     }
 
     @GetMapping("/matched")
     public List<List<OrderDto>> findMatched(Principal principal) {
-        String ownerName = principal.getName();
-        return orderService.findMatchedByOwnerName(ownerName);
+        String username = principal.getName();
+        return orderService.findMatchedByUsername(username);
     }
 
     @PutMapping("/select/for_transaction/{orderId}")
     public List<OrderDto> selectForTransaction(@PathVariable UUID orderId, Principal principal) {
-        String ownerName = principal.getName();
-        List<OrderDto> selected = orderService.selectForTransaction(ownerName, orderId);
-        orderEventPublisher.publish(ownerName, orderId.toString());
+        String username = principal.getName();
+        List<OrderDto> selected = orderService.selectForTransaction(username, orderId);
+        orderEventPublisher.publish(username, orderId.toString());
         return selected;
     }
 
     @GetMapping("/selected/for_transaction")
     public List<OrderDto> findSelectedForTransaction(Principal principal) {
-        String ownerName = principal.getName();
-        return orderService.findSelected(ownerName, SelectType.FOR_TRANSACTION);
+        String username = principal.getName();
+        return orderService.findSelected(username, SelectType.FOR_TRANSACTION);
     }
 
     @PutMapping("/close/{orderId}")
     public OrderDto close(@PathVariable String orderId, Principal principal) {
-        String ownerName = principal.getName();
-        return orderService.changeStatus(ownerName, orderId, OrderStatus.CLOSED);
+        String username = principal.getName();
+        return orderService.changeStatus(username, orderId, OrderStatus.CLOSED);
     }
 }

@@ -7,7 +7,7 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class TransactionGraphDto {
 
-    private String ownerName;
+    private String username;
     private String orderId;
     private String orderTitle;
 }
