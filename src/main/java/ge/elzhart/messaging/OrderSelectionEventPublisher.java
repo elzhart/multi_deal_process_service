@@ -13,8 +13,8 @@ public class OrderSelectionEventPublisher implements OrderEventPublisher {
 
     private final ApplicationEventPublisher applicationEventPublisher;
 
-    public void publish(final String ownerName, final String orderId) {
-        OrderSelectionEvent customSpringEvent = new OrderSelectionEvent(this, ownerName, orderId);
+    public void publish(final String username, final String orderId) {
+        OrderSelectionEvent customSpringEvent = new OrderSelectionEvent(this, username, orderId);
         log.info("Publishing order selection event. {}", customSpringEvent);
         applicationEventPublisher.publishEvent(customSpringEvent);
     }

@@ -30,6 +30,6 @@ public class RecordSearchMapper {
 
     public TransactionGraphDto fromRecordToTransaction(Value value) {
         return new TransactionGraphDto()
-                .setOwnerName(value.get("name").asString());
+                .setUsername(value.get("username").asString());
     }
 }

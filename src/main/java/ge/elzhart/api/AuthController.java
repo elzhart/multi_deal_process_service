@@ -21,8 +21,7 @@ import ge.elzhart.api.dto.user.AuthRequest;
 import ge.elzhart.api.dto.user.CreateUserRequest;
 import ge.elzhart.api.dto.user.UserDto;
 import ge.elzhart.api.mapper.UserViewMapper;
-import ge.elzhart.model.domain.User;
-import ge.elzhart.service.owner.OwnerService;
+import ge.elzhart.model.domain.user.User;
 import ge.elzhart.service.user.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -40,7 +39,6 @@ public class AuthController {
     private final JwtEncoder jwtEncoder;
     private final UserViewMapper userViewMapper;
     private final UserService userService;
-    private final OwnerService ownerService;
 
     @PostMapping("login")
     public ResponseEntity<UserDto> login(@RequestBody @Valid AuthRequest request) {
@@ -80,7 +78,6 @@ public class AuthController {
 
     @PostMapping("register")
     public UserDto register(@RequestBody @Valid CreateUserRequest request) {
-        ownerService.create(request.username());
-        return userService.create(request);
+        return userService.create(request, request.username());
     }
 }

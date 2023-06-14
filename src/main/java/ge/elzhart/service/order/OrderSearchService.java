@@ -29,8 +29,8 @@ public class OrderSearchService extends SearchService<OrderFilterDto, OrderDto> 
     @Override
     protected String generateQuery(OrderFilterDto orderFilterDto) {
         StringBuilder stringBuilder = new StringBuilder(
-                "MATCH (owner: Owner)-[:CREATED]->(order)\n"
-                        + "WHERE owner.name <> $ownerName\n");
+                "MATCH (user: User)-[:CREATED]->(order)\n"
+                        + "WHERE user.username <> $username\n");
         if (StringUtils.isNotBlank(orderFilterDto.getTitle())) {
             stringBuilder.append("AND order.title = $title\n");
         }
@@ -57,7 +57,7 @@ public class OrderSearchService extends SearchService<OrderFilterDto, OrderDto> 
     @Override
     protected Map<String, Object> generateParams(OrderFilterDto orderFilterDto, Pageable pageable) {
         Map<String, Object> params = new java.util.HashMap<>(Map.of(
-                "ownerName", orderFilterDto.getUserName(),
+                "username", orderFilterDto.getUsername(),
                 "order", pageable.getSort().stream().findFirst().toString(),
                 "offset", pageable.getOffset(),
                 "pageSize", pageable.getPageSize()
@@ -92,8 +92,8 @@ public class OrderSearchService extends SearchService<OrderFilterDto, OrderDto> 
     @Override
     protected String totalCountQuery(OrderFilterDto orderFilterDto) {
         StringBuilder stringBuilder = new StringBuilder(
-                "MATCH (owner: Owner)-[:CREATED]->(order)\n"
-                        + "WHERE owner.name <> $ownerName\n");
+                "MATCH (user: User)-[:CREATED]->(order)\n"
+                        + "WHERE user.username <> $username\n");
         if (StringUtils.isNotBlank(orderFilterDto.getTitle())) {
             stringBuilder.append("AND order.title = $title\n");
         }
@@ -114,7 +114,7 @@ public class OrderSearchService extends SearchService<OrderFilterDto, OrderDto> 
 
     @Override
     protected Map<String, Object> generateTotalCountParams(OrderFilterDto orderFilterDto) {
-        Map<String, Object> params = new HashMap<>(Map.of("ownerName", orderFilterDto.getUserName()));
+        Map<String, Object> params = new HashMap<>(Map.of("username", orderFilterDto.getUsername()));
 
         if (StringUtils.isNotBlank(orderFilterDto.getTitle())) {
             params.put("title", orderFilterDto.getTitle());

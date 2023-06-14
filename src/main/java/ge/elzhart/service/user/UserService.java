@@ -8,13 +8,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Set;
 
 import ge.elzhart.api.dto.user.CreateUserRequest;
 import ge.elzhart.api.dto.user.UpdateUserRequest;
 import ge.elzhart.api.dto.user.UserDto;
 import ge.elzhart.api.mapper.UserEditMapper;
 import ge.elzhart.api.mapper.UserViewMapper;
+import ge.elzhart.exception.NotFoundException;
 import ge.elzhart.exception.ValidationException;
+import ge.elzhart.model.domain.user.User;
 import ge.elzhart.model.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 
@@ -31,7 +35,7 @@ public class UserService implements UserDetailsService {
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
-    public UserDto create(CreateUserRequest request) {
+    public UserDto create(CreateUserRequest request, String creatorName) {
         if (userRepository.findByUsername(request.username()).isPresent()) {
             throw new ValidationException("Username exists!");
         }
@@ -41,6 +45,8 @@ public class UserService implements UserDetailsService {
 
         var user = userEditMapper.create(request);
         user.setPassword(passwordEncoder.encode(request.password()));
+        user.setCreatedBy(creatorName);
+        user.setCreatedDate(LocalDateTime.now());
 
         user = userRepository.save(user).withCreatedDate(LocalDateTime.now());
 
@@ -48,8 +54,8 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional
-    public UserDto update(String id, UpdateUserRequest request) {
-        var user = userRepository.getById(id).withLastModifiedDate(LocalDateTime.now());
+    public UserDto update(String id, UpdateUserRequest request, String updaterName) {
+        var user = userRepository.getById(id).withLastModifiedDate(LocalDateTime.now()).withLastModifiedBy(updaterName);
         userEditMapper.update(request, user);
 
         user = userRepository.save(user);
@@ -80,4 +86,31 @@ public class UserService implements UserDetailsService {
         return userViewMapper.toUserView(userRepository.getById(id));
     }
 
+    public User findByUsername(String username) {
+        return userRepository.findByUsername(username).orElseThrow(() -> new NotFoundException(User.class, username));
+    }
+
+    @Transactional
+    public User save(User user) {
+        return userRepository.save(user);
+    }
+
+    public List<User> findAllByNameIn(Set<String> usernames) {
+        return userRepository.findAllByUsernameIn(usernames);
+    }
+
+    @Transactional
+    public void saveAll(List<User> users) {
+        userRepository.saveAll(users);
+    }
+
+    @Transactional
+    public void detachOrderFromUser(String username, String orderId) {
+        userRepository.detachOrderFromUser(username, orderId);
+    }
+
+    @Transactional
+    public void deleteAll(Set<String> users) {
+        userRepository.deleteAll(userRepository.findAllByUsernameIn(users));
+    }
 }

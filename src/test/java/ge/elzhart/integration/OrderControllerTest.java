@@ -20,12 +20,12 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArraySet;
 
+import ge.elzhart.api.dto.RestPage;
 import ge.elzhart.api.dto.order.OrderDto;
 import ge.elzhart.api.dto.order.OrderFilterDto;
-import ge.elzhart.api.dto.RestPage;
 import ge.elzhart.api.dto.order.SelectOrdersRequest;
 import ge.elzhart.integration.data.OrderTestDataFactory;
-import ge.elzhart.integration.data.OwnerTestDataFactory;
+import ge.elzhart.integration.data.UserTestDataFactory;
 import ge.elzhart.model.domain.OrderCategory;
 import ge.elzhart.model.domain.OrderStatus;
 import ge.elzhart.model.domain.Role;
@@ -61,17 +61,17 @@ public class OrderControllerTest extends AbstractIntegrationTest {
     @Autowired
     private ObjectMapper objectMapper;
     @Autowired
-    private OwnerTestDataFactory ownerTestDataFactory;
-    @Autowired
     private OrderTestDataFactory orderTestDataFactory;
+    @Autowired
+    private UserTestDataFactory userTestDataFactory;
 //    @Autowired
 //    private WebTestClient webTestClient;
 
     @BeforeEach
     void beforeTest() {
-        ownerTestDataFactory.createOwner(ALINA_USER);
-        ownerTestDataFactory.createOwner(MIKE_USER);
-        ownerTestDataFactory.createOwner(PITER_USER);
+        userTestDataFactory.createUser(ALINA_USER, ALINA_USER);
+        userTestDataFactory.createUser(MIKE_USER, MIKE_USER);
+        userTestDataFactory.createUser(PITER_USER, PITER_USER);
     }
 
     @Test
@@ -327,7 +327,7 @@ public class OrderControllerTest extends AbstractIntegrationTest {
     void tearDown() {
         orderTestDataFactory.deleteAll(deleteAfterTest);
         deleteAfterTest.clear();
-        ownerTestDataFactory.deleteAll(Set.of(ALINA_USER, MIKE_USER, PITER_USER));
+        userTestDataFactory.deleteAll(Set.of(ALINA_USER, MIKE_USER, PITER_USER));
     }
 
     private RestPage<OrderDto> execute(String url, OrderFilterDto filter, PageRequest pageRequest) throws Exception {
