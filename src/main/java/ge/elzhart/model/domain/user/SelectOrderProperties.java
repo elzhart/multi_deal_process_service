@@ -1,9 +1,10 @@
-package ge.elzhart.model.domain;
+package ge.elzhart.model.domain.user;
 
 import org.springframework.data.neo4j.core.schema.RelationshipId;
 import org.springframework.data.neo4j.core.schema.RelationshipProperties;
 import org.springframework.data.neo4j.core.schema.TargetNode;
 
+import ge.elzhart.model.domain.order.Order;
 import lombok.Data;
 
 @RelationshipProperties

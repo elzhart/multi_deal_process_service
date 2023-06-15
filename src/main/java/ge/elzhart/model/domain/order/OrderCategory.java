@@ -1,4 +1,4 @@
-package ge.elzhart.model.domain;
+package ge.elzhart.model.domain.order;
 
 public enum OrderCategory {
     CLIMBING,

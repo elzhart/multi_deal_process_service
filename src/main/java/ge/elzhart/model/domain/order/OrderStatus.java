@@ -1,4 +1,4 @@
-package ge.elzhart.model.domain;
+package ge.elzhart.model.domain.order;
 
 public enum OrderStatus {
     DRAFT, // Order is created, but not published - because it need to add some info

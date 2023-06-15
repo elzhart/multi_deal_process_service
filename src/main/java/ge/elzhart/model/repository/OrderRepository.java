@@ -7,8 +7,8 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-import ge.elzhart.model.domain.Order;
-import ge.elzhart.model.domain.SelectType;
+import ge.elzhart.model.domain.order.Order;
+import ge.elzhart.model.domain.user.SelectType;
 
 public interface OrderRepository extends Neo4jRepository<Order, String> {
 

@@ -10,6 +10,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Testcontainers
 public abstract class AbstractIntegrationTest {
+
     static final Neo4jContainer<?> neo4jContainer = new Neo4jContainer<>("neo4j:5.7").withReuse(true);
 
     @DynamicPropertySource

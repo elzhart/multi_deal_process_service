@@ -26,10 +26,10 @@ import ge.elzhart.api.dto.order.OrderFilterDto;
 import ge.elzhart.api.dto.order.SelectOrdersRequest;
 import ge.elzhart.integration.data.OrderTestDataFactory;
 import ge.elzhart.integration.data.UserTestDataFactory;
-import ge.elzhart.model.domain.OrderCategory;
-import ge.elzhart.model.domain.OrderStatus;
-import ge.elzhart.model.domain.Role;
-import ge.elzhart.model.domain.SelectType;
+import ge.elzhart.model.domain.order.OrderCategory;
+import ge.elzhart.model.domain.order.OrderStatus;
+import ge.elzhart.model.domain.user.Role;
+import ge.elzhart.model.domain.user.SelectType;
 
 import static ge.elzhart.util.JsonHelper.fromJson;
 import static ge.elzhart.util.JsonHelper.toJson;

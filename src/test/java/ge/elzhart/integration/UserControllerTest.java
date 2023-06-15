@@ -14,7 +14,7 @@ import ge.elzhart.api.dto.user.CreateUserRequest;
 import ge.elzhart.api.dto.user.UpdateUserRequest;
 import ge.elzhart.api.dto.user.UserDto;
 import ge.elzhart.integration.data.UserTestDataFactory;
-import ge.elzhart.model.domain.Role;
+import ge.elzhart.model.domain.user.Role;
 
 import static ge.elzhart.util.JsonHelper.fromJson;
 import static ge.elzhart.util.JsonHelper.toJson;

@@ -5,8 +5,8 @@ import org.neo4j.driver.Value;
 import ge.elzhart.api.dto.order.OrderDto;
 import ge.elzhart.api.dto.transaction.TransactionGraphDto;
 import ge.elzhart.api.dto.user.UserDto;
-import ge.elzhart.model.domain.OrderCategory;
-import ge.elzhart.model.domain.OrderStatus;
+import ge.elzhart.model.domain.order.OrderCategory;
+import ge.elzhart.model.domain.order.OrderStatus;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
