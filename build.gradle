@@ -64,6 +64,9 @@ dependencies {
 
     //String
     implementation "org.apache.commons:commons-lang3:$common_lang_version"
+    
+    // Swagger for rest documentation
+    implementation "org.springdoc:springdoc-openapi-ui:$springdoc_version"
 
     // Testing
     testImplementation "org.springframework.boot:spring-boot-starter-test:$spring_boot_version"

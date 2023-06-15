@@ -1,4 +1,4 @@
-package ge.elzhart.model.domain;
+package ge.elzhart.model.domain.user;
 
 import org.springframework.security.core.GrantedAuthority;
 

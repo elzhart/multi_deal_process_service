@@ -2,8 +2,8 @@ package ge.elzhart.api.dto.order;
 
 import java.time.LocalDateTime;
 
-import ge.elzhart.model.domain.OrderCategory;
-import ge.elzhart.model.domain.OrderStatus;
+import ge.elzhart.model.domain.order.OrderCategory;
+import ge.elzhart.model.domain.order.OrderStatus;
 import lombok.Data;
 import lombok.experimental.Accessors;
 

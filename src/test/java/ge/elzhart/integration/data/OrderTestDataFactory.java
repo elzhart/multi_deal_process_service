@@ -7,9 +7,9 @@ import java.util.Set;
 import java.util.UUID;
 
 import ge.elzhart.api.dto.order.OrderDto;
-import ge.elzhart.model.domain.OrderCategory;
-import ge.elzhart.model.domain.OrderStatus;
-import ge.elzhart.model.domain.SelectType;
+import ge.elzhart.model.domain.order.OrderCategory;
+import ge.elzhart.model.domain.order.OrderStatus;
+import ge.elzhart.model.domain.user.SelectType;
 import ge.elzhart.service.order.OrderService;
 import lombok.RequiredArgsConstructor;
 

@@ -4,7 +4,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
 
 import ge.elzhart.api.dto.order.OrderDto;
-import ge.elzhart.model.domain.Order;
+import ge.elzhart.model.domain.order.Order;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface OrderMapper {

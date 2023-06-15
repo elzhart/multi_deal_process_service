@@ -23,6 +23,8 @@ import ge.elzhart.api.dto.user.UserDto;
 import ge.elzhart.api.mapper.UserViewMapper;
 import ge.elzhart.model.domain.user.User;
 import ge.elzhart.service.user.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -33,6 +35,7 @@ import static java.util.stream.Collectors.joining;
 @RestController
 @RequestMapping(path = "api/public")
 @RequiredArgsConstructor
+@Tag(name = "Authentication", description = "Use for actions related to login and registration")
 public class AuthController {
 
     private final AuthenticationManager authenticationManager;
@@ -41,6 +44,7 @@ public class AuthController {
     private final UserService userService;
 
     @PostMapping("login")
+    @Operation(summary = "login with credentials - username and password")
     public ResponseEntity<UserDto> login(@RequestBody @Valid AuthRequest request) {
         try {
             var authentication =
@@ -77,6 +81,7 @@ public class AuthController {
     }
 
     @PostMapping("register")
+    @Operation(summary = "registers a user on the platform")
     public UserDto register(@RequestBody @Valid CreateUserRequest request) {
         return userService.create(request, request.username());
     }

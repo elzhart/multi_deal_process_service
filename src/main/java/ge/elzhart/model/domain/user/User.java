@@ -17,9 +17,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import ge.elzhart.model.domain.Order;
-import ge.elzhart.model.domain.Role;
-import ge.elzhart.model.domain.SelectOrderProperties;
+import ge.elzhart.model.domain.order.Order;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

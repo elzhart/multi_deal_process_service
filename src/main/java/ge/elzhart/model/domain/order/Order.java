@@ -1,4 +1,4 @@
-package ge.elzhart.model.domain;
+package ge.elzhart.model.domain.order;
 
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
