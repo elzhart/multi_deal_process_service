@@ -28,7 +28,7 @@ public interface OrderRepository extends Neo4jRepository<Order, String> {
             + "RETURN order")
     List<Order> findSelectedByUsername(@Param("name") String username, @Param("type") SelectType selectType);
 
-    @Query("MATCH p=(:User {username: $name})-[selected: SELECTED]->(order)-[*]-(:User {username: $name})\n"
+    @Query("MATCH p=(:User {username: $name})-[selected: SELECTED]->(order)<-[:CREATED]-(user)-[*]-(:User {username: $name})\n"
             + "WHERE order.status = 'POSTED'\n"
             + "AND selected.type = $type\n"
             + "RETURN nodes(p)")

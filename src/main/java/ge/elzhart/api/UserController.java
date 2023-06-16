@@ -29,7 +29,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping(path = "api/admin/user")
+@RequestMapping(path = "/api/admin/user")
 @RolesAllowed(Role.USER_ADMIN)
 @RequiredArgsConstructor
 @Tag(name = "Users", description = "Use for actions related to users")

@@ -33,7 +33,7 @@ import static java.util.stream.Collectors.joining;
 
 
 @RestController
-@RequestMapping(path = "api/public")
+@RequestMapping(path = "/api/public")
 @RequiredArgsConstructor
 @Tag(name = "Authentication", description = "Use for actions related to login and registration")
 public class AuthController {
@@ -66,7 +66,7 @@ public class AuthController {
                             .issuer("example.io")
                             .issuedAt(now)
                             .expiresAt(now.plusSeconds(expiry))
-                            .subject(format("%s,%s", user.getId(), user.getUsername()))
+                            .subject(format(user.getUsername()))
                             .claim("roles", scope)
                             .build();
 
