@@ -124,6 +124,7 @@ public class TransactionGraphService {
                 Order order = transactionPair.get(user.getUsername());
                 order.setStatus(OrderStatus.DRAFT);
                 user.getCreated().add(order);
+                user.getSelected().removeIf(properties -> order.getId().equals(properties.getOrder().getId()));
             }
         });
 
