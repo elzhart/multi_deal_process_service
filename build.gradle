@@ -43,11 +43,6 @@ dependencies {
     // Metrics
     implementation "org.springframework.boot:spring-boot-starter-actuator:$spring_boot_version"
 
-    // Cache
-    implementation "com.hazelcast:hazelcast:$hazelcastVersion"
-    implementation "com.hazelcast:hazelcast-kubernetes:$hazelcastKubernetesVersion"
-    implementation "com.hazelcast:hazelcast-spring:$hazelcastVersion"
-
     // for mutable lists
     implementation "com.google.guava:guava:$guava_version"
 
