@@ -3,10 +3,14 @@
 Platform to place and search orders, to find shorter graph cycles btw them
 Version - 0.0.1-SNAPSHOT
 
-### Build, run and test
-build: ./gradlew.file build <br />
-run: ./gradlew.file bootRun <br />
-test: open http://localhost:8080/swagger-ui/index.html to test api
+### Build and run db
+- cd docker_dir <br />
+- docker-compose up neo4j
+
+### Build, run and test app
+- ./gradlew.file build <br />
+- ./gradlew.file bootRun <br />
+- open http://localhost:8080/swagger-ui/index.html to test api
 
 ### Configuration
 
