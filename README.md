@@ -1,4 +1,5 @@
-### Multi deal process service
+# Multi deal process service
+### Description
 Platform to place and search orders, to find shorter graph cycles btw them
 Version - 0.0.1-SNAPSHOT
 
