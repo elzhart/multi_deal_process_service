@@ -3,8 +3,8 @@ Platform to place and search orders, to find shorter graph cycles btw them
 Version - 0.0.1-SNAPSHOT
 
 ### Build, run and test
-build: ./gradlew.file build
-run: ./gradlew.file bootRun
+build: ./gradlew.file build <br />
+run: ./gradlew.file bootRun <br />
 test: open http://localhost:8080/swagger-ui/index.html to test api
 
 ### Configuration
